@@ -17,7 +17,7 @@ import { sendWelcomeEmail } from "../utils/sendEmail.js";
   // POST
   export const createUser = async (require, response) => {
     try {
-      const { name, email, password } = require.body;
+      const { name, email, password, role } = require.body;
 
       if (!name || !email || !password) {
         return response.status(400).json({
@@ -31,7 +31,8 @@ import { sendWelcomeEmail } from "../utils/sendEmail.js";
         name,
         email,
         password: hashedPassword,
-      });
+        role: role || 'user',
+      })
 
       response.status(201).json({
         message: "Usuario creado correctamente",
@@ -66,7 +67,7 @@ import { sendWelcomeEmail } from "../utils/sendEmail.js";
       );
 
       if (updated) {
-        response.json({ message: "✅ Usuario actualizado correctamente" });
+        response.json({ message: "Usuario actualizado correctamente" });
       } else {
         response.status(404).json({ error: "Usuario no encontrado" });
       }

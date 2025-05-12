@@ -12,13 +12,10 @@ export const login = async (require, response) => {
     }
 
     const user = await usersCrud.findOne({ where: { email } });
-    if (!user) {
-      return response.status(404).json({ error: "Usuario no encontrado" });
-    }
+    const isPasswordValid = user && await checkPassword(password, user.password);
 
-    const isPasswordValid = await checkPassword(password, user.password);
-    if (!isPasswordValid) {
-      return response.status(401).json({ error: "Contraseña incorrecta" });
+    if (!user || !isPasswordValid) {
+      return response.status(401).json({ error: "Correo o contraseña incorrectos" });
     }
 
     return response.status(200).json({
@@ -27,10 +24,11 @@ export const login = async (require, response) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (error) {
     console.error("Error en login:", error);
-    return res.status(500).json({ error: "Error interno en login" });
+    return response.status(500).json({ error: "Error interno en login" });
   }
 };

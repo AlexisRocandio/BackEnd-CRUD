@@ -1,6 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../db.js';
 
+
 const usersCrud = sequelize.define('usersCrud', {
   id: {
     type: DataTypes.INTEGER,
@@ -20,9 +21,14 @@ const usersCrud = sequelize.define('usersCrud', {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
+  role: {
+    type: DataTypes.ENUM('user', 'admin'),
+    allowNull: false,
+    defaultValue: 'user',
+  },
 }, {
-  tableName: 'userscrud', // El nombre de la tabla que uso en mi base de datos en prod. Se creo con fines de demostracion para este crud.
+  tableName: 'userscrud',
   timestamps: false,
-});
+})
 
 export default usersCrud;
